@@ -1,9 +1,11 @@
 <?php
 
-use App\Models\Transactions;
+//use App\Models\Transactions;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +25,11 @@ Route::get('/transactions/searchName/{trans_name}', [TransactionsController::cla
 Route::get('/transactions/searchCategory/{category_name}', [TransactionsController::class, 'searchCategory']);
 Route::get('/transactions/searchProperty/{trans_name}', [TransactionsController::class, 'searchProperty']);
 Route::get('/transactions/searchByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'searchByNameAndCategory']);
+Route::put('/transactions/{id}', [TransactionsController::class, 'update']);
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::get('/users/findMoney/{name}', [UserController::class, 'findMoney']);
+
 
 
 
@@ -34,7 +41,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     Route::post('/logout', [AuthController::class, 'logout']);
-   
+    Route::put('/users/{id}', [UserController::class, 'update']);
+
 });
 
 
@@ -47,6 +55,7 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::get('/products/search/{name}', [ProductController::class, 'search']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/categories', [CategoriesController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

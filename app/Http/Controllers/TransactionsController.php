@@ -60,7 +60,7 @@ class TransactionsController extends Controller
         return Transactions::destroy($id);
     }
 
-     /**
+    /**
      * Search for a name
      * @param str $name
      */
@@ -72,12 +72,18 @@ class TransactionsController extends Controller
     }
 
     public function searchProperty($name){
-        return Transactions::whereHas('user', function ($query) use ($name) {
-            $query->where('name', 'like', '%' . $name . '%');
-        })
-        ->whereNotIn('category_id', [9, 10])
-        ->get();
-    }
+        return Transactions::whereIn('Category_id', [1, 2, 3, 4, 5, 6, 7, 8, 11])
+            ->whereHas('user', function ($query) use ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            })
+            ->groupBy('user_id', 'Trans_name')
+            ->havingRaw('COUNT(Trans_name) = 1')
+            ->select('user_id', 'Trans_name')
+            ->get();}
+
+
+
+
 
     public function searchCategory($category){
         return Transactions::whereHas('categories', function ($query) use ($category) {
@@ -94,5 +100,5 @@ class TransactionsController extends Controller
             })
             ->get();
     }
-    
+
 }
