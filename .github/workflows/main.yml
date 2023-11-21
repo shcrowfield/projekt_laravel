@@ -1,5 +1,5 @@
 name: Deploy
-run-name: ${{ githu.actor }} is deploying application 🚀
+run-name: ${{ github.actor }} is deploying application 🚀
 on:
   push:
     branches: [ production ]
