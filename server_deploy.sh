@@ -10,19 +10,11 @@ echo "Deploying application ..."
     git reset --hard origin/deploy
 
     # Install dependencies based on lock file
-    composer install --no-interaction --prefer-dist --optimize-autoloader
+    docker-compose -f docker-compose.yml exec laravel sh -c "composer update"
 
     # Migrate database
-    php artisan migrate --force
+    docker-compose -f docker-compose.yml exec laravel sh -c "php artisan migrate"
 
-    # Note: If you're using queue workers, this is the place to restart them.
-    # ...
-
-    # Clear cache
-    php artisan optimize
-
-    # Reload PHP to update opcache
-    echo "" | sudo -S service php7.4-fpm reload
 # Exit maintenance mode
 php artisan up
 
