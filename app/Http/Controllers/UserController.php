@@ -50,38 +50,38 @@ class UserController extends Controller
         return User::destroy($id);
     }
 
-public function findMoney($name)
-{
-    $transactions = Transactions::whereHas('user', function ($query) use ($name) {
-        $query->where('name', 'like', '%' . $name . '%');
-    })->get();
+    public function findMoney($name)
+    {
+        $transactions = Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })->get();
 
-    // Extract user IDs from the transactions
-    $userIds = $transactions->pluck('user_id')->unique();
+        // Extract user IDs from the transactions
+        $userIds = $transactions->pluck('user_id')->unique();
 
-    // Get the net_money for each user using PHP calculations
-    $users = User::whereIn('id', $userIds)
-        ->with('transactions')
-        ->get();
+        // Get the net_money for each user using PHP calculations
+        $users = User::whereIn('id', $userIds)
+            ->with('transactions')
+            ->get();
 
-    // Calculate net_money for each user
-    $netMoneyResults = [];
+        // Calculate net_money for each user
+        $netMoneyResults = [];
 
-    $users->each(function ($user) use (&$netMoneyResults) {
-        $expenses = $user->transactions->where('is_income', 0)->sum('price');
-        $income = $user->transactions->where('is_income', 1)->sum('price');
+        $users->each(function ($user) use (&$netMoneyResults) {
+            $expenses = $user->transactions->where('is_income', 0)->sum('price');
+            $income = $user->transactions->where('is_income', 1)->sum('price');
 
-        $netMoney = $user->money - $expenses + $income;
+            $netMoney = $user->money - $expenses + $income;
 
-        $netMoneyResults[] = [
-            'user_id' => $user->id,
-            'name' => $user->name,
-            'net_money' => $netMoney,
-        ];
-    });
+            $netMoneyResults[] = [
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'net_money' => $netMoney,
+            ];
+        });
 
-    return $netMoneyResults;
+        return $netMoneyResults;
 
-}
+    }
 
 }

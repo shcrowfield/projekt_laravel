@@ -19,9 +19,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get('/transactions/searchNameByMonth/{name}/{selectedMonth}', [TransactionsController::class, 'searchNameByMonth']);
 Route::get('/transactions', [TransactionsController::class, 'index']);
 Route::post('/transactions', [TransactionsController::class, 'store']);
-Route::get('/transactions/searchName/{trans_name}', [TransactionsController::class, 'searchName']);
+Route::get('/transactions/searchName/{name}', [TransactionsController::class, 'searchName']);
 Route::get('/transactions/searchCategory/{category_name}', [TransactionsController::class, 'searchCategory']);
 Route::get('/transactions/searchProperty/{trans_name}', [TransactionsController::class, 'searchProperty']);
 Route::get('/transactions/searchByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'searchByNameAndCategory']);

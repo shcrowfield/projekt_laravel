@@ -71,14 +71,27 @@ class TransactionsController extends Controller
         })->get();
     }
 
+    public function searchNameByMonth($name, $selectedMonth)
+    {
+        // Assuming $selectedMonth is in the format 'YYYY-MM'
+        $startDate = $selectedMonth . '-01';
+        $endDate = date('Y-m-t', strtotime($startDate));
+
+        return Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->whereBetween('trans_date', [$startDate, $endDate])
+            ->get();
+    }
+
     public function searchProperty($name){
-        return Transactions::whereIn('Category_id', [1, 2, 3, 4, 5, 6, 7, 8, 11])
+        return Transactions::whereIn('category_id', [1, 2, 3, 4, 5, 6, 7, 8, 11])
             ->whereHas('user', function ($query) use ($name) {
                 $query->where('name', 'like', '%' . $name . '%');
             })
-            ->groupBy('user_id', 'Trans_name')
-            ->havingRaw('COUNT(Trans_name) = 1')
-            ->select('user_id', 'Trans_name')
+            ->groupBy('user_id', 'trans_name')
+            ->havingRaw('COUNT(trans_name) = 1')
+            ->select('user_id', 'trans_name')
             ->get();}
 
 
