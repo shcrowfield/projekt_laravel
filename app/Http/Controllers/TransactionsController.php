@@ -114,4 +114,40 @@ class TransactionsController extends Controller
             ->get();
     }
 
+    public function sumByNameAndCategory($name, $category) {
+        $result = Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->whereHas('categories', function ($query) use ($category) {
+                $query->where('category_name', 'like', '%' . $category . '%');
+            })
+            ->where('is_income', '!=', 1)
+            ->get();
+
+        $totalSum = $result->sum('price');
+
+        $data = [
+            'total_sum' => $totalSum,
+            'transactions' => $result,
+        ];
+
+        return $data;
+    }
+
+    public function lastOneOfCategory($name, $category){
+
+        return Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->whereHas('categories', function ($query) use ($category) {
+                $query->where('category_name', 'like', '%' . $category . '%');
+            })
+            ->latest('trans_date')
+            ->first();
+    }
+
+
+
+
+
 }

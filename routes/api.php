@@ -25,6 +25,8 @@ Route::post('/transactions', [TransactionsController::class, 'store']);
 Route::get('/transactions/searchName/{name}', [TransactionsController::class, 'searchName']);
 Route::get('/transactions/searchCategory/{category_name}', [TransactionsController::class, 'searchCategory']);
 Route::get('/transactions/searchProperty/{trans_name}', [TransactionsController::class, 'searchProperty']);
+Route::get('/transactions/sumByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'sumByNameAndCategory']);
+Route::get('/transactions/lastOneOfCategory/{name}/{category_name}', [TransactionsController::class, 'lastOneOfCategory']);
 Route::get('/transactions/searchByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'searchByNameAndCategory']);
 Route::put('/transactions/{id}', [TransactionsController::class, 'update']);
 Route::get('/users', [UserController::class, 'index']);
