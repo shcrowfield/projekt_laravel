@@ -92,7 +92,8 @@ class TransactionsController extends Controller
             ->groupBy('user_id', 'trans_name')
             ->havingRaw('COUNT(trans_name) = 1')
             ->select('user_id', 'trans_name')
-            ->get();}
+            ->get();
+    }
 
 
 
@@ -132,6 +133,32 @@ class TransactionsController extends Controller
         ];
 
         return $data;
+    }
+
+    public function sumIsincome($name, $is_income) {
+        $result = Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->where('is_income', '=', $is_income)
+            ->get();
+
+        $totalSum = $result->sum('price');
+
+        $data = [
+            'total_sum' => $totalSum,
+            'transactions' => $result,
+        ];
+
+        return $data;
+    }
+
+
+    public function listIsincome($name, $is_income){
+        return Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->where('is_income', '=', $is_income)
+            ->get();
     }
 
     public function lastOneOfCategory($name, $category){

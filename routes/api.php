@@ -19,20 +19,24 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('/transactions/searchNameByMonth/{name}/{selectedMonth}', [TransactionsController::class, 'searchNameByMonth']);
-Route::get('/transactions', [TransactionsController::class, 'index']);
-Route::post('/transactions', [TransactionsController::class, 'store']);
-Route::get('/transactions/searchName/{name}', [TransactionsController::class, 'searchName']);
-Route::get('/transactions/searchCategory/{category_name}', [TransactionsController::class, 'searchCategory']);
-Route::get('/transactions/searchProperty/{trans_name}', [TransactionsController::class, 'searchProperty']);
-Route::get('/transactions/sumByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'sumByNameAndCategory']);
-Route::get('/transactions/lastOneOfCategory/{name}/{category_name}', [TransactionsController::class, 'lastOneOfCategory']);
-Route::get('/transactions/searchByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'searchByNameAndCategory']);
-Route::put('/transactions/{id}', [TransactionsController::class, 'update']);
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-Route::get('/users/findMoney/{name}', [UserController::class, 'findMoney']);
-
+Route::get('/transactions/searchNameByMonth/{name}/{selectedMonth}', [TransactionsController::class, 'searchNameByMonth']); //havi kimutatás
+Route::get('/transactions', [TransactionsController::class, 'index']); //tranzakció listázás
+Route::post('/transactions', [TransactionsController::class, 'store']); // tranzakció létrehozás
+Route::get('/transactions/searchName/{name}', [TransactionsController::class, 'searchName']); //tranzakció listázás név alapján
+Route::get('/transactions/searchCategory/{category_name}', [TransactionsController::class, 'searchCategory']); //tranzakció listázása kategória alapján
+Route::get('/transactions/searchProperty/{trans_name}', [TransactionsController::class, 'searchProperty']); //vagyontárgyak listázása
+Route::get('/transactions/sumByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'sumByNameAndCategory']); //adott kategória price összege
+Route::get('/transactions/lastOneOfCategory/{name}/{category_name}', [TransactionsController::class, 'lastOneOfCategory']); //adott kategória utolsó tranzakciója
+Route::get('/transactions/searchByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'searchByNameAndCategory']); //kategóriánkénti szűrés
+Route::get('/transactions/listIsincome/{name}/{is_income}', [TransactionsController::class, 'listIsincome']); //bevétel/kiadás lekérdezése
+Route::get('/transactions/sumIsincome/{name}/{is_income}', [TransactionsController::class, 'sumIsincome']); //bevétel/kiadás összege
+Route::put('/transactions/{id}', [TransactionsController::class, 'update']); //tranzakció módosítás
+Route::get('/users', [UserController::class, 'index']); //felhasználók listázása
+Route::get('/users/{id}', [UserController::class, 'show']); //felhasználó megjelenítése
+Route::get('/users/findMoney/{name}', [UserController::class, 'findMoney']); //egyenleg lekérdezése money-kiadás+bevétel
+Route::get('/categories', [CategoriesController::class, 'index']); //kategóriák listázása
+Route::post('/register', [AuthController::class, 'register']); //regisztráció
+Route::post('/login', [AuthController::class, 'login']); //bejelentkezés
 
 
 
@@ -56,9 +60,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::get('/products/search/{name}', [ProductController::class, 'search']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/categories', [CategoriesController::class, 'index']);
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
