@@ -84,6 +84,35 @@ class TransactionsController extends Controller
             ->get();
     }
 
+    public function sumByNameAndEachCategoryAndMonth($name, $selectedMonth) {
+        $startDate = $selectedMonth . '-01';
+        $endDate = date('Y-m-t', strtotime($startDate));
+
+        $results = Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->whereBetween('trans_date', [$startDate, $endDate])
+            ->where('is_income', '!=', 1)
+            ->get();
+
+        $categorySums = [];
+
+        foreach ($results as $transaction) {
+            $categories = $transaction->categories;
+            if ($categories && is_iterable($categories)) {
+                foreach ($categories as $category) {
+                    $categoryName = $category->category_name;
+                    $categoryPrice = $categorySums[$categoryName] ?? 0;
+                    $categorySums[$categoryName] = $categoryPrice + $transaction->price;
+                }
+            }
+        }
+
+        return $categorySums;
+    }
+
+
+
     public function searchProperty($name){
         return Transactions::whereIn('category_id', [1, 2, 3, 4, 5, 6, 7, 8, 11])
             ->whereHas('user', function ($query) use ($name) {
@@ -92,7 +121,8 @@ class TransactionsController extends Controller
             ->groupBy('user_id', 'trans_name')
             ->havingRaw('COUNT(trans_name) = 1')
             ->select('user_id', 'trans_name')
-            ->get();}
+            ->get();
+    }
 
 
 
@@ -133,6 +163,26 @@ class TransactionsController extends Controller
 
         return $data;
     }
+
+
+    public function sumIsincome($name, $is_income) {
+        $result = Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->where('is_income', '=', $is_income)
+            ->get();
+
+        $totalSum = $result->sum('price');
+
+        $data = [
+            'total_sum' => $totalSum,
+            'transactions' => $result,
+        ];
+
+        return $data;
+    }
+
+
 
     public function listIsincome($name, $is_income){
         return Transactions::whereHas('user', function ($query) use ($name) {

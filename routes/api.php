@@ -28,6 +28,7 @@ Route::get('/transactions/searchProperty/{trans_name}', [TransactionsController:
 Route::get('/transactions/sumByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'sumByNameAndCategory']); //adott kategória price összege
 Route::get('/transactions/lastOneOfCategory/{name}/{category_name}', [TransactionsController::class, 'lastOneOfCategory']); //adott kategória utolsó tranzakciója
 Route::get('/transactions/searchByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'searchByNameAndCategory']); //kategóriánkénti szűrés
+Route::get('/transactions/sumByNameAndEachCategoryAndMonth/{name}/{selectedMonth}', [TransactionsController::class, 'sumByNameAndEachCategoryAndMonth']); //kategóriánkénti szűrés
 Route::get('/transactions/listIsincome/{name}/{is_income}', [TransactionsController::class, 'listIsincome']); //bevétel lekérdezése
 Route::put('/transactions/{id}', [TransactionsController::class, 'update']); //tranzakció módosítás
 Route::get('/users', [UserController::class, 'index']); //felhasználók listázása
