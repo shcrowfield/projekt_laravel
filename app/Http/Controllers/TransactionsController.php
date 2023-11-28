@@ -134,6 +134,14 @@ class TransactionsController extends Controller
         return $data;
     }
 
+    public function listIsincome($name, $is_income){
+        return Transactions::whereHas('user', function ($query) use ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        })
+            ->where('is_income', '=', $is_income)
+            ->get();
+    }
+
     public function lastOneOfCategory($name, $category){
 
         return Transactions::whereHas('user', function ($query) use ($name) {
@@ -145,9 +153,5 @@ class TransactionsController extends Controller
             ->latest('trans_date')
             ->first();
     }
-
-
-
-
 
 }
