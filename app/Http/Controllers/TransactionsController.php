@@ -88,9 +88,10 @@ class TransactionsController extends Controller
         $startDate = $selectedMonth . '-01';
         $endDate = date('Y-m-t', strtotime($startDate));
 
-        $results = Transactions::whereHas('user', function ($query) use ($name) {
-            $query->where('name', 'like', '%' . $name . '%');
-        })
+        $results = Transactions::with('categories:id,category_name')
+            ->whereHas('user', function ($query) use ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            })
             ->whereBetween('trans_date', [$startDate, $endDate])
             ->where('is_income', '!=', 1)
             ->get();
@@ -98,17 +99,22 @@ class TransactionsController extends Controller
         $categorySums = [];
 
         foreach ($results as $transaction) {
-            $categories = $transaction->categories;
-            if ($categories && is_iterable($categories)) {
-                foreach ($categories as $category) {
-                    $categoryName = $category->category_name;
-                    $categoryPrice = $categorySums[$categoryName] ?? 0;
-                    $categorySums[$categoryName] = $categoryPrice + $transaction->price;
-                }
+            // Assuming each transaction has a category_id property
+            $categoryId = $transaction->category_id;
+
+            // Retrieve the corresponding category from the database
+            $category = Categories::find($categoryId);
+
+            // Check if the category exists
+            if ($category) {
+                $categoryName = $category->category_name;
+                $categoryPrice = $categorySums[$categoryName] ?? 0;
+                $categorySums[$categoryName] = $categoryPrice + $transaction->price;
             }
         }
 
         return $categorySums;
+
     }
 
 
