@@ -24,7 +24,7 @@ Route::get('/transactions', [TransactionsController::class, 'index']); //tranzak
 Route::post('/transactions', [TransactionsController::class, 'store']); // tranzakció létrehozás
 Route::get('/transactions/searchName/{name}', [TransactionsController::class, 'searchName']); //tranzakció listázás név alapján
 Route::get('/transactions/searchCategory/{category_name}', [TransactionsController::class, 'searchCategory']); //tranzakció listázása kategória alapján
-Route::get('/transactions/searchProperty/{trans_name}', [TransactionsController::class, 'searchProperty']); //vagyontárgyak listázása
+Route::get('/transactions/searchProperty/{name}', [TransactionsController::class, 'searchProperty']); //vagyontárgyak listázása
 Route::get('/transactions/sumByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'sumByNameAndCategory']); //adott kategória price összege
 Route::get('/transactions/lastOneOfCategory/{name}/{category_name}', [TransactionsController::class, 'lastOneOfCategory']); //adott kategória utolsó tranzakciója
 Route::get('/transactions/searchByNameAndCategory/{name}/{category_name}', [TransactionsController::class, 'searchByNameAndCategory']); //kategóriánkénti szűrés
