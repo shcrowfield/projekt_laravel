@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Http\Middleware\HandleCors as Middleware;
+
 class Cors extends Middleware
 {
-    public function handle($request, Closure $next)
+    public function handle($request, \Closure $next)
     {
         return $next($request)
             ->header('Access-Control-Allow-Origin', '*')
