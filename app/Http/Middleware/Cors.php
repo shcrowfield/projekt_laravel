@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-class EncryptCookies extends Middleware
+class Cors extends Middleware
 {
     public function handle($request, Closure $next)
     {
