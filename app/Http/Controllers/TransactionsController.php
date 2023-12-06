@@ -106,14 +106,17 @@ class TransactionsController extends Controller
 
             if ($category) {
                 $categoryName = $category->category_name;
-                $categoryPrice = $categorySums[$categoryName] ?? 0;
-                $categorySums[$categoryName] = $categoryPrice + $transaction->price;
+                $categoryPrice = $categorySums[$categoryName]['value'] ?? 0;
+                $categorySums[$categoryName] = [
+                    'category_name' => $categoryName,
+                    'value' => $categoryPrice + $transaction->price,
+                ];
             }
         }
 
-        return $categorySums;
-
+        return array_values($categorySums);
     }
+
 
 
 
