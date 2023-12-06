@@ -55,10 +55,11 @@ class TransactionsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $name)
+    public function destroy(string $trans_name)
     {
-        return Transactions::destroy($name);
+        return Transactions::where('trans_name', $trans_name)->delete();
     }
+
 
     /**
      * Search for a name
