@@ -19,9 +19,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+//Public routes
 Route::get('/transactions/searchNameByMonth/{name}/{selectedMonth}', [TransactionsController::class, 'searchNameByMonth']); //havi kimutatás
 Route::get('/transactions', [TransactionsController::class, 'index']); //tranzakció listázás
 Route::post('/transactions', [TransactionsController::class, 'store']); // tranzakció létrehozás
+Route::delete('/transactions/{id}', [TransactionsController::class, 'destroy']); //tranzakció törlés
 Route::get('/transactions/searchName/{name}', [TransactionsController::class, 'searchName']); //tranzakció listázás név alapján
 Route::get('/transactions/searchCategory/{category_name}', [TransactionsController::class, 'searchCategory']); //tranzakció listázása kategória alapján
 Route::get('/transactions/searchProperty/{name}', [TransactionsController::class, 'searchProperty']); //vagyontárgyak listázása
@@ -37,31 +39,15 @@ Route::get('/users/findMoney/{name}', [UserController::class, 'findMoney']); //e
 Route::get('/categories', [CategoriesController::class, 'index']); //kategóriák listázása
 Route::post('/register', [AuthController::class, 'register']); //regisztráció
 Route::post('/login', [AuthController::class, 'login']); //bejelentkezés
-Route::put('/users/{id}', [UserController::class, 'update']);
+Route::put('/users/{id}', [UserController::class, 'update']); //felhasználó adatainak módosítása
 
-
-//Route::resource('products', ProductController::class);
 
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/products', [ProductController::class, 'store']);
-    Route::put('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
 
 });
-
-
-
-
-
-//Public routes
-Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::get('/products/search/{name}', [ProductController::class, 'search']);
-
-
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

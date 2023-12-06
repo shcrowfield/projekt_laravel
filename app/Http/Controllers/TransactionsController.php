@@ -99,13 +99,10 @@ class TransactionsController extends Controller
         $categorySums = [];
 
         foreach ($results as $transaction) {
-            // Assuming each transaction has a category_id property
             $categoryId = $transaction->category_id;
 
-            // Retrieve the corresponding category from the database
             $category = Categories::find($categoryId);
 
-            // Check if the category exists
             if ($category) {
                 $categoryName = $category->category_name;
                 $categoryPrice = $categorySums[$categoryName] ?? 0;

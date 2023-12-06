@@ -52,25 +52,23 @@ class UserController extends Controller
 
     public function findMoney($name)
     {
+        //megkeresi a paraméterben kapott névvel rendelkező felhasználót
         $transactions = Transactions::whereHas('user', function ($query) use ($name) {
             $query->where('name', 'like', '%' . $name . '%');
         })->get();
 
-        // Extract user IDs from the transactions
+        // Kiszedi a user_id-kat a tranzakciókból
         $userIds = $transactions->pluck('user_id')->unique();
 
-        // Get the net_money for each user using PHP calculations
+        // Lekéri a felhasználókat
         $users = User::whereIn('id', $userIds)
             ->with('transactions')
             ->get();
-
-        // Calculate net_money for each user
         $netMoneyResults = [];
 
         $users->each(function ($user) use (&$netMoneyResults) {
             $expenses = $user->transactions->where('is_income', 0)->sum('price');
             $income = $user->transactions->where('is_income', 1)->sum('price');
-
             $netMoney = $user->money - $expenses + $income;
 
             $netMoneyResults[] = [
@@ -79,7 +77,6 @@ class UserController extends Controller
                 'net_money' => $netMoney,
             ];
         });
-
         return $netMoneyResults;
 
     }
